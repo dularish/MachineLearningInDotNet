@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MachineLearningStartup", "MachineLearningStartup\MachineLearningStartup.csproj", "{9AF65BFA-3CBE-4C04-B593-D13111363944}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9AF65BFA-3CBE-4C04-B593-D13111363944}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AF65BFA-3CBE-4C04-B593-D13111363944}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AF65BFA-3CBE-4C04-B593-D13111363944}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AF65BFA-3CBE-4C04-B593-D13111363944}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C7DB3AF6-8532-4018-8035-D52FD65F42B9}
+	EndGlobalSection
+EndGlobal
