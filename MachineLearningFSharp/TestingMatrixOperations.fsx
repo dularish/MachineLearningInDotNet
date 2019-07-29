@@ -28,3 +28,4 @@ printfn "Inverse of matrixA : %A" aMatrixA'
 printfn "Matrix multiplication result : %A" (aMatrixA * aMatrixB)
 printfn "Elementwise addition of matrix : %A" (aMatrixA + aNumber)
 printfn "Elementwise subtraction of two matrices : %A" (aMatrixB - aMatrixA)
+printfn "Elementwise multiplication of two matrices : %A" (aMatrixA .* aMatrixB)

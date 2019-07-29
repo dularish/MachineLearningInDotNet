@@ -109,7 +109,7 @@ let computeAccuracy (Y':Vector<float>) Y =
     Y' - Y
     |> Vector.map (fun x -> Math.Abs((float)x))
     |> Vector.sum
-    |> (fun x -> x/(float)Y'.Count)
+    |> (fun x -> (1. - x/(float)Y'.Count)*100.)
 
 let createModel (X_train:Matrix<double>) Y_train X_test (Y_test:Matrix<float>) (num_iterations) learning_rate =
     let W,b = initializeParameters X_train.RowCount
