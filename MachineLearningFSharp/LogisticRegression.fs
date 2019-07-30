@@ -14,6 +14,9 @@ exception IncompatibleTypeOutputForWeights of string
 exception IncompatibleTypeOutputForBias of string
 exception UnexpectedDimensionDuringCalculation of string
 
+let sigmoid = fun(x:double) ->
+    (1./(1. + (Math.E)**(-1.*x)))
+
 let initializeParameters n = 
     //let W = Matrix<double>.Build.Random(n,1,9)
     let W = Matrix<double>.Build.Dense(n,1,0.)
@@ -23,7 +26,7 @@ let initializeParameters n =
 let computeProbabilityOfSuccess (W:Matrix<double>) (b:double) (X:Matrix<double>) =
     let computedMatrix = 
         (W.Transpose() * X ) + b
-        |> Matrix.map (fun(a) -> SpecialFunctions.Logistic a)
+        |> Matrix.map (fun(a) -> sigmoid(a))
     if computedMatrix.RowCount = 1 then
         computedMatrix
     else
@@ -36,7 +39,7 @@ let computeCost predictedValues actualValues=
     let secondLogTerm = 
         predictedValues
         |> Matrix.map (fun(a) -> log (1.-a))
-
+        
     let costForAllSamplesMatrix = actualValues .* firstLogTerm + (actualValues |> Matrix.map (fun a -> 1. - a)) .* secondLogTerm
 
     let rowSum = costForAllSamplesMatrix.RowSums()
