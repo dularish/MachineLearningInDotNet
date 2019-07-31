@@ -6,6 +6,7 @@ open MathNet.Numerics
 open MathNet.Numerics
 open System
 open MathNet.Numerics.Data.Text
+open MathNet.Numerics.LinearAlgebra
 
 exception IncompatibleOutputMatrixDimensions of string
 exception IncompatibleTypeForWeights of string
@@ -18,7 +19,6 @@ let sigmoid = fun(x:double) ->
     (1./(1. + (Math.E)**(-1.*x)))
 
 let initializeParameters n = 
-    //let W = Matrix<double>.Build.Random(n,1,9)
     let W = Matrix<double>.Build.Dense(n,1,0.)
     let b = 0.0
     (W,b)
@@ -33,14 +33,8 @@ let computeProbabilityOfSuccess (W:Matrix<double>) (b:double) (X:Matrix<double>)
         raise (UnexpectedDimensionDuringCalculation "Output dimension is not single row")
 
 let computeCost predictedValues actualValues= 
-    let firstLogTerm = 
-        predictedValues
-        |> Matrix.map (fun(a) -> log a)
-    let secondLogTerm = 
-        predictedValues
-        |> Matrix.map (fun(a) -> log (1.-a))
         
-    let costForAllSamplesMatrix = actualValues .* firstLogTerm + (actualValues |> Matrix.map (fun a -> 1. - a)) .* secondLogTerm
+    let costForAllSamplesMatrix = actualValues .* Matrix.Log(predictedValues) + (1. - actualValues) .* Matrix.Log(1.-predictedValues)
 
     let rowSum = costForAllSamplesMatrix.RowSums()
 
@@ -49,10 +43,10 @@ let computeCost predictedValues actualValues=
     else
         raise (IncompatibleOutputMatrixDimensions ("Wrong input matrix"))
 
-let computeDerivatives (predictedValues:Matrix<double>) (actualValues:Matrix<double>) X = 
-    let dw = (X * (predictedValues - actualValues).Transpose())
-                |> Matrix.map (fun a -> a * (1./(double)actualValues.ColumnCount))
-    let db = (1./(double)actualValues.ColumnCount) * ((predictedValues - actualValues).RowSums()).[0]
+let computeDerivatives (Y':Matrix<double>) (Y:Matrix<double>) X = 
+    let dw = (X * (Y' - Y).Transpose())
+                |> Matrix.map (fun a -> a * (1./(double)Y.ColumnCount))
+    let db = (1./(double)Y.ColumnCount) * ((Y' - Y).RowSums()).[0]
 
     dw, db
 
