@@ -27,7 +27,7 @@ let main argv =
     //printfn "%A" test_y
     //printfn "%A" initialize_dataset
 
-    let model = LogisticRegression.createModel train_x train_y test_x test_y 2000 0.005
+    let model = NeuralNetwork.createModel train_x train_y test_x test_y 2000 0.005
 
     System.Console.ReadKey() |> ignore
     printfn "%A" argv

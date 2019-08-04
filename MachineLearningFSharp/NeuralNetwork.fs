@@ -4,6 +4,8 @@ open MathNet.Numerics.LinearAlgebra
 open System.Collections.Generic
 open CommonFunctions
 open HelperFunctionsForML
+open MathNet.Numerics.Random
+open MathNet.Numerics
 
 exception IncorrectLayerData of string
 
@@ -31,9 +33,9 @@ let initializeParameters (layerDims: int list) =
         [1..(layerDims.Length-1)]
         |> List.iter (fun (i) ->
                         let Weights = 
-                            ((double)0.01) * (Matrix<double>.Build.Random(layerDims.[i], layerDims.[i-1]))
+                            ((double)0.01) * (Matrix<double>.Build.Random(layerDims.[i], layerDims.[i-1], Distributions.Normal(0.,1., MersenneTwister(9) )))
                         let bias = 
-                            ((double)0.01) * (Matrix<double>.Build.Random(layerDims.[i], 1))
+                            ((double)0.01) * (Matrix<double>.Build.Dense(layerDims.[i], 1, 0.))
                         parameters.Add(i, LayerParameters(Weights, bias))
                      )
         parameters
@@ -70,7 +72,10 @@ let forwardPropagateAllLayers (parameters:Dictionary<int, LayerParameters>) (inp
     previousLayerOutput, cachesDict
                 
 let backwardPropagate (dA:Matrix<double>) (inputCache:InputCache) (backDerivativeFn) =
-    let dZ = dA .* (inputCache.Z |> Matrix.map backDerivativeFn)
+    let dZ = 
+        dA .* (inputCache.Z |> Matrix.map backDerivativeFn)
+        |> Matrix.map (fun x ->
+                        if x <= 0. then 0. else x)
     //let dW = 
     let dW = 
         dZ * (inputCache.InputForLayer.Transpose())
@@ -87,7 +92,7 @@ let backwardPropagate (dA:Matrix<double>) (inputCache:InputCache) (backDerivativ
 let backPropagateAllLayers (Y':Matrix<float>) (Y:Matrix<float>) (inputCaches:Dictionary<int, InputCache>) =
     
     let mutable dANextLayer = 
-        (Y ./ Y') - ((1. - Y) ./ (1. - Y'))
+        - ((Y ./ Y') - ((1. - Y) ./ (1. - Y')))
 
     let layers = 
         inputCaches.Keys
