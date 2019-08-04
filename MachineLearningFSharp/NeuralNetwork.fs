@@ -80,7 +80,7 @@ let backwardPropagate (dA:Matrix<double>) (inputCache:InputCache) (backDerivativ
     let dW = 
         dZ * (inputCache.InputForLayer.Transpose())
         |> Matrix.map (fun (x) ->
-                            (double)inputCache.InputForLayer.ColumnCount * x)
+                            (1./(double)inputCache.InputForLayer.ColumnCount) * x)
     let db = 
         dZ
         |> collapseSamples
