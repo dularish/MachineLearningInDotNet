@@ -15,9 +15,6 @@ exception IncompatibleTypeOutputForWeights of string
 exception IncompatibleTypeOutputForBias of string
 exception UnexpectedDimensionDuringCalculation of string
 
-let sigmoid = fun(x:double) ->
-    (1./(1. + (Math.E)**(-1.*x)))
-
 let initializeParameters n = 
     let W = Matrix<double>.Build.Dense(n,1,0.)
     let b = 0.0
@@ -26,22 +23,11 @@ let initializeParameters n =
 let computeProbabilityOfSuccess (W:Matrix<double>) (b:double) (X:Matrix<double>) =
     let computedMatrix = 
         (W.Transpose() * X ) + b
-        |> Matrix.map (fun(a) -> sigmoid(a))
+        |> Matrix.map (fun(a) -> CommonFunctions.sigmoid(a))
     if computedMatrix.RowCount = 1 then
         computedMatrix
     else
         raise (UnexpectedDimensionDuringCalculation "Output dimension is not single row")
-
-let computeCost predictedValues actualValues= 
-        
-    let costForAllSamplesMatrix = actualValues .* Matrix.Log(predictedValues) + (1. - actualValues) .* Matrix.Log(1.-predictedValues)
-
-    let rowSum = costForAllSamplesMatrix.RowSums()
-
-    if rowSum.Count = 1 then
-        (-1./((double)predictedValues.ColumnCount)) * rowSum.[0]
-    else
-        raise (IncompatibleOutputMatrixDimensions ("Wrong input matrix"))
 
 let computeDerivatives (Y':Matrix<double>) (Y:Matrix<double>) X = 
     let dw = (X * (Y' - Y).Transpose())
@@ -59,7 +45,7 @@ type DerivativeTypes =
 
 let propagate W b X Y =
     let Y' = computeProbabilityOfSuccess W b X
-    let cost = computeCost Y' Y
+    let cost = CommonFunctions.computeCost Y' Y
     let dw,db = computeDerivatives Y' Y X
     let grads = dict<string, DerivativeTypes>["dw",MatrixDerivative dw; "db", FloatDerivative db]
     grads, cost

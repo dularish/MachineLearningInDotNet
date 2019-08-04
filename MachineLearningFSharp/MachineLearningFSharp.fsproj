@@ -51,7 +51,10 @@
     <Compile Include="AssemblyInfo.fs" />
     <None Include="TestingMatrixOperations.fsx" />
     <Compile Include="OpenCVUtils.fs" />
+    <Compile Include="HelperFunctionsForML.fs" />
+    <Compile Include="CommonFunctions.fs" />
     <Compile Include="LogisticRegression.fs" />
+    <Compile Include="NeuralNetwork.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
