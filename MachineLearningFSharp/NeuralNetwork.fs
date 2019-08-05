@@ -33,7 +33,7 @@ let initializeParameters (layerDims: int list) =
         [1..(layerDims.Length-1)]
         |> List.iter (fun (i) ->
                         let Weights = 
-                            ((double)0.01) * (Matrix<double>.Build.Random(layerDims.[i], layerDims.[i-1], Distributions.Normal(0.,1., MersenneTwister(9) )))
+                            (Matrix<double>.Build.Random(layerDims.[i], layerDims.[i-1], Distributions.Normal(0.,1., MersenneTwister(9) ))) / (sqrt ((double)layerDims.[i-1]))
                         let bias = 
                             ((double)0.01) * (Matrix<double>.Build.Dense(layerDims.[i], 1, 0.))
                         parameters.Add(i, LayerParameters(Weights, bias))
@@ -72,11 +72,8 @@ let forwardPropagateAllLayers (parameters:Dictionary<int, LayerParameters>) (inp
     previousLayerOutput, cachesDict
                 
 let backwardPropagate (dA:Matrix<double>) (inputCache:InputCache) (backDerivativeFn) =
-    let dZ = 
-        dA .* (inputCache.Z |> Matrix.map backDerivativeFn)
-        |> Matrix.map (fun x ->
-                        if x <= 0. then 0. else x)
-    //let dW = 
+    let dZ = backDerivativeFn dA inputCache.Z
+
     let dW = 
         dZ * (inputCache.InputForLayer.Transpose())
         |> Matrix.map (fun (x) ->
@@ -104,7 +101,7 @@ let backPropagateAllLayers (Y':Matrix<float>) (Y:Matrix<float>) (inputCaches:Dic
 
     layers
     |> Seq.iter (fun (x) ->
-                    let dX, backPropCache = backwardPropagate (dANextLayer) (inputCaches.[x]) (if x = layers.[0] then sigmoid' else relu')
+                    let dX, backPropCache = backwardPropagate (dANextLayer) (inputCaches.[x]) (if x = layers.[0] then dZSigmoidBackDerivative else dZReluBackDerivative)
                     gradsDict.Add(x, backPropCache)
                     dANextLayer <- dX)
 
@@ -133,8 +130,8 @@ let createModel (X_train:Matrix<double>) Y_train X_test (Y_test:Matrix<float>) (
 
                     let cost = computeCost Y' Y_train
 
-                    //if i%100 = 0 then
-                    printfn "Cost after %A iterations : %A" i cost
+                    if i%100 = 0 then
+                        printfn "Cost after %A iterations : %A" i cost
     
                     let grads = backPropagateAllLayers Y' Y_train inputCaches
 

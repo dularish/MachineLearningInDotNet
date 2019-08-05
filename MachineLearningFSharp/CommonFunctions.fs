@@ -12,12 +12,17 @@ let sigmoid = fun(x:double) ->
 let sigmoid' = fun(x:double) ->
     let sigmoidValue = sigmoid x
     sigmoidValue * (1. - sigmoidValue)
+
+let dZSigmoidBackDerivative (dA) (Z) =
+    dA .* (Z |> Matrix.map sigmoid')
     
 let relu = fun(x:double) ->
     if x > 0. then x else 0.
 
-let relu' = fun(x:double) ->
-    if x > 0. then x else 0.
+let dZReluBackDerivative (dA:Matrix<double>) (Z:Matrix<double>) =
+    dA
+    |> Matrix.mapi (fun x y value ->
+                        if (Z.At(x,y) <= 0.) then 0. else value)
 
 let computeCost predictedValues actualValues= 
     //Not using collapseSamples helper method here as this is more efficient
