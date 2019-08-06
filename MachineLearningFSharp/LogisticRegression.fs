@@ -88,12 +88,6 @@ let optimize W b X Y num_iterations learning_rate =
 
     trained_params, costs
 
-let computeAccuracy (Y':Vector<float>) Y =
-    Y' - Y
-    |> Vector.map (fun x -> Math.Abs((float)x))
-    |> Vector.sum
-    |> (fun x -> (1. - x/(float)Y'.Count)*100.)
-
 let createModel (X_train:Matrix<double>) Y_train X_test (Y_test:Matrix<float>) (num_iterations) learning_rate =
     let W,b = initializeParameters X_train.RowCount
 
@@ -115,8 +109,8 @@ let createModel (X_train:Matrix<double>) Y_train X_test (Y_test:Matrix<float>) (
     let pred_train = predict_class trained_W trained_b X_train
     let pred_test = predict_class trained_W trained_b X_test
 
-    let accuracy_train = computeAccuracy pred_train (Y_train.Row(0))
-    let accuracy_test = computeAccuracy pred_test (Y_test.Row(0))
+    let accuracy_train = CommonFunctions.computeAccuracy pred_train (Y_train.Row(0))
+    let accuracy_test = CommonFunctions.computeAccuracy pred_test (Y_test.Row(0))
 
     printfn "Accuracy of training samples : %A" accuracy_train
     printfn "Accuracy of testing samples : %A" accuracy_test

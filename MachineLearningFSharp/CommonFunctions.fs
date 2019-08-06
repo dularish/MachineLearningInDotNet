@@ -20,9 +20,9 @@ let relu = fun(x:double) ->
     if x > 0. then x else 0.
 
 let dZReluBackDerivative (dA:Matrix<double>) (Z:Matrix<double>) =
-    dA
-    |> Matrix.mapi (fun x y value ->
-                        if (Z.At(x,y) <= 0.) then 0. else value)
+    dA .* (Z |> Matrix.map (fun x -> if x <= 0. then 0. else 1.))
+    //|> Matrix.mapi (fun x y value ->
+    //                    if (Z.At(x,y) <= 0.) then 0. else value)
 
 let computeCost predictedValues actualValues= 
     //Not using collapseSamples helper method here as this is more efficient
@@ -34,3 +34,9 @@ let computeCost predictedValues actualValues=
         (-1./((double)predictedValues.ColumnCount)) * rowSum.[0]
     else
         raise (IncompatibleOutputMatrixDimensions ("Wrong input matrix"))
+
+let computeAccuracy (Y':Vector<float>) Y =
+    Y' - Y
+    |> Vector.map (fun x -> Math.Abs((float)x))
+    |> Vector.sum
+    |> (fun x -> (1. - x/(float)Y'.Count)*100.)

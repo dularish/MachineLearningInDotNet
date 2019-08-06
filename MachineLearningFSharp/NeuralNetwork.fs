@@ -33,7 +33,7 @@ let initializeParameters (layerDims: int list) =
         [1..(layerDims.Length-1)]
         |> List.iter (fun (i) ->
                         let Weights = 
-                            (Matrix<double>.Build.Random(layerDims.[i], layerDims.[i-1], Distributions.Normal(0.,1., MersenneTwister(9) ))) / (sqrt ((double)layerDims.[i-1]))
+                            (Matrix<double>.Build.Random(layerDims.[i], layerDims.[i-1])) / (sqrt ((double)layerDims.[i-1]))
                         let bias = 
                             ((double)0.01) * (Matrix<double>.Build.Dense(layerDims.[i], 1, 0.))
                         parameters.Add(i, LayerParameters(Weights, bias))
@@ -121,6 +121,10 @@ let updateParameters (parameters:Dictionary<int, LayerParameters>) (backPropGrad
                         )
     updatedParams
 
+let predictClass X parameters =
+    let Y', _ = forwardPropagateAllLayers parameters X
+    Y'
+
 let createModel (X_train:Matrix<double>) Y_train X_test (Y_test:Matrix<float>) (num_iterations) learning_rate =
     let mutable parameters = initializeParameters [X_train.RowCount; 20; 7; 5; 1]
 
@@ -138,5 +142,14 @@ let createModel (X_train:Matrix<double>) Y_train X_test (Y_test:Matrix<float>) (
                     let updatedParams = updateParameters parameters grads learning_rate
                     parameters <- updatedParams
                     )
+
+    let pred_train = predictClass X_train parameters
+    let pred_test = predictClass X_test parameters
+
+    let accuracy_train = CommonFunctions.computeAccuracy (pred_train.Row(0)) (Y_train.Row(0))
+    let accuracy_test = CommonFunctions.computeAccuracy (pred_test.Row(0)) (Y_test.Row(0))
+
+    printfn "Accuracy of training samples : %A" accuracy_train
+    printfn "Accuracy of testing samples : %A" accuracy_test
 
     

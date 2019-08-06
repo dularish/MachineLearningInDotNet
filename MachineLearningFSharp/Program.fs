@@ -39,13 +39,15 @@ let compareProviderPerformance = fun() ->
 [<EntryPoint>]
 let main argv = 
     Control.UseNativeMKL()
-    //let train_x,test_x,train_y, test_y = MLDatasets.load_catsDatasets()
+    printfn "Reading data..."
+    let train_x,test_x,train_y, test_y = MLDatasets.load_catsDatasets()
+    printfn "Model training started ..."
     //showEachImageFromDB(train_x)
     
     //let model = LogisticRegression.createModel train_x train_y test_x test_y 2000 0.005
-    //let model = NeuralNetwork.createModel train_x train_y test_x test_y 2000 0.0075
+    let model = NeuralNetwork.createModel train_x train_y test_x test_y 2500 0.0075
 
-    compareProviderPerformance()
+    //compareProviderPerformance()
 
     System.Console.ReadKey() |> ignore
     printfn "%A" argv
