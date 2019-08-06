@@ -25,9 +25,9 @@
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>bin\$(Configuration)\$(AssemblyName).XML</DocumentationFile>
-    <Prefer32Bit>true</Prefer32Bit>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +49,9 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <None Include="NativeDLLs\MathNet.Numerics.MKL.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestingMatrixOperations.fsx" />
     <Compile Include="OpenCVUtils.fs" />
     <Compile Include="HelperFunctionsForML.fs" />
@@ -106,7 +109,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\OpenCvSharp4.runtime.win.4.1.0.20190416\build\net\OpenCvSharp4.runtime.win.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCvSharp4.runtime.win.4.1.0.20190416\build\net\OpenCvSharp4.runtime.win.props'))" />
+    <Error Condition="!Exists('..\packages\MathNet.Numerics.MKL.Win-x64.2.3.0\build\MathNet.Numerics.MKL.Win-x64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MathNet.Numerics.MKL.Win-x64.2.3.0\build\MathNet.Numerics.MKL.Win-x64.targets'))" />
   </Target>
+  <Import Project="..\packages\MathNet.Numerics.MKL.Win-x64.2.3.0\build\MathNet.Numerics.MKL.Win-x64.targets" Condition="Exists('..\packages\MathNet.Numerics.MKL.Win-x64.2.3.0\build\MathNet.Numerics.MKL.Win-x64.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
