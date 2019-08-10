@@ -6,6 +6,7 @@ open CommonFunctions
 open HelperFunctionsForML
 open MathNet.Numerics.Random
 open MathNet.Numerics
+open MathNet.Numerics.Data.Text
 
 exception IncorrectLayerData of string
 
@@ -33,7 +34,8 @@ let initializeParameters (layerDims: int list) =
         [1..(layerDims.Length-1)]
         |> List.iter (fun (i) ->
                         let Weights = 
-                            (Matrix<double>.Build.Random(layerDims.[i], layerDims.[i-1])) / (sqrt ((double)layerDims.[i-1]))
+                            //DelimitedReader.Read<double> (@"C:\Users\dular\NeuralNetworksCourse\Week4-Materials\W" + i.ToString() + ".csv", false, ",",false)//Verified with python generated weights for testing purposes
+                            (Matrix<double>.Build.Random(layerDims.[i], layerDims.[i-1], 1)) / (sqrt ((double)layerDims.[i-1]))
                         let bias = 
                             ((double)0.01) * (Matrix<double>.Build.Dense(layerDims.[i], 1, 0.))
                         parameters.Add(i, LayerParameters(Weights, bias))
@@ -124,6 +126,7 @@ let updateParameters (parameters:Dictionary<int, LayerParameters>) (backPropGrad
 let predictClass X parameters =
     let Y', _ = forwardPropagateAllLayers parameters X
     Y'
+    |> Matrix.map (fun(x) -> if x > 0.5 then 1. else 0.)
 
 let createModel (X_train:Matrix<double>) Y_train X_test (Y_test:Matrix<float>) (num_iterations) learning_rate =
     let mutable parameters = initializeParameters [X_train.RowCount; 20; 7; 5; 1]
