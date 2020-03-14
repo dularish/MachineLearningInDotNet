@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.421
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MachineLearningStartup", "MachineLearningStartup\MachineLearningStartup.csproj", "{9AF65BFA-3CBE-4C04-B593-D13111363944}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MachineLearningFSharp", "MachineLearningFSharp\MachineLearningFSharp.fsproj", "{F7374F3C-8E5B-411F-97EF-A6B50FD42FB5}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MLDatasets", "MLDatasets\MLDatasets.fsproj", "{1073DDA1-707A-419D-AF98-B90B1C31C32D}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "MLDatasets", "MLDatasets\MLDatasets.fsproj", "{1073DDA1-707A-419D-AF98-B90B1C31C32D}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MLImplUnitTests", "MLImplUnitTests\MLImplUnitTests.fsproj", "{DC47E866-FF9D-4325-84BB-6BED7ACBEFA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{1073DDA1-707A-419D-AF98-B90B1C31C32D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1073DDA1-707A-419D-AF98-B90B1C31C32D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1073DDA1-707A-419D-AF98-B90B1C31C32D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC47E866-FF9D-4325-84BB-6BED7ACBEFA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC47E866-FF9D-4325-84BB-6BED7ACBEFA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC47E866-FF9D-4325-84BB-6BED7ACBEFA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC47E866-FF9D-4325-84BB-6BED7ACBEFA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
