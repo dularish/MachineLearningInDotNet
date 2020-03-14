@@ -3,8 +3,6 @@ open LogisticRegression
 open OpenCvSharp
 open OpenCVUtils
 open MathNet.Numerics
-open MathNet.Numerics.LinearAlgebra
-open System.Timers
 open System.Diagnostics
 
 // Learn more about F# at http://fsharp.org
@@ -32,10 +30,6 @@ let compareProviderPerformance = fun() ->
     timer.Stop()
     printfn "ManagedProvider timer clock : %A" timer.Elapsed.TotalSeconds
 
-
-
-    
-
 [<EntryPoint>]
 let main argv = 
     Control.UseNativeMKL()
@@ -48,7 +42,7 @@ let main argv =
     let model = NeuralNetwork.createModel train_x train_y test_x test_y 2500 0.0075
 
     //compareProviderPerformance()
-
+    
     System.Console.ReadKey() |> ignore
     printfn "%A" argv
     0 // return an integer exit code

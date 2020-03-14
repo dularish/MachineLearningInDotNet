@@ -4,9 +4,7 @@ open MathNet.Numerics.LinearAlgebra
 open System.Collections.Generic
 open CommonFunctions
 open HelperFunctionsForML
-open MathNet.Numerics.Random
-open MathNet.Numerics
-open MathNet.Numerics.Data.Text
+open System.Runtime.Serialization
 
 exception IncorrectLayerData of string
 
@@ -16,13 +14,25 @@ type InputCache(weights, bias, inputForLayer, ZComputed) =
     member this.InputForLayer = inputForLayer
     member this.Z = ZComputed
 
+[<DataContract>]
 type LayerParameters(weights, bias) =
-    member this.W = weights
-    member this.b = bias
+    [<DataMember>]
+    member val W = weights with get, set
+    [<DataMember>]
+    member val b = bias with get, set
 
 type BackPropCache(dW, db) =
     member this.dW = dW
     member this.db = db
+
+[<DataContract>]
+type Model(numIterations, learningRate, trainedParams) =
+    [<DataMember>]
+    member val NumIterations = numIterations with get, set
+    [<DataMember>]
+    member val LearningRate = learningRate with get, set
+    [<DataMember>]
+    member val TrainedParams = trainedParams with get, set
 
 let initializeParameters (layerDims: int list) =
     if layerDims.Length < 3 then
@@ -154,5 +164,6 @@ let createModel (X_train:Matrix<double>) Y_train X_test (Y_test:Matrix<float>) (
 
     printfn "Accuracy of training samples : %A" accuracy_train
     printfn "Accuracy of testing samples : %A" accuracy_test
+    Model(num_iterations, learning_rate, parameters)
 
     
