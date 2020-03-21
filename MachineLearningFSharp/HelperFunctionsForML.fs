@@ -25,16 +25,23 @@ let serializeModelToFile = fun(model, path) ->
     serializer.WriteObject(fileWriter, model)
     fileWriter.Close();
     
-let deserializeModelFromFile<'T> path =
+
+
+let deserializeModelFromStream<'T> (stream:Stream) =
     let deserializer = DataContractSerializer(typeof<'T>, knownTypes)
     
-    let fileReader = new FileStream(path, FileMode.Open)
     let readerQuotas = XmlDictionaryReaderQuotas()
     readerQuotas.MaxArrayLength <- System.Int32.MaxValue
-    let reader = XmlDictionaryReader.CreateTextReader(fileReader, readerQuotas)
+    let reader = XmlDictionaryReader.CreateTextReader(stream, readerQuotas)
     let objRead = deserializer.ReadObject(reader, true)
     reader.Close()
-    fileReader.Close()
+    stream.Close()
     match objRead with
     | :? 'T as modelObj -> modelObj
     | _ -> raise (invalidArg "path" "Could not deserialize into desired type of model")
+
+let deserializeModelFromFile<'T> path =
+    
+    let fileReader = new FileStream(path, FileMode.Open)
+
+    deserializeModelFromStream<'T> fileReader
