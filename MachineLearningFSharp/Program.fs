@@ -1,4 +1,5 @@
-﻿open MathNet.Numerics.LinearAlgebra
+﻿module MachineLearningFSharpMain
+open MathNet.Numerics.LinearAlgebra
 open LogisticRegression
 open OpenCvSharp
 open OpenCVUtils
@@ -10,7 +11,7 @@ open System.Diagnostics
 
 let showEachImageFromDB = fun(X:Matrix<double>) ->
     for i = 0 to (X.ColumnCount-1) do
-        let imageData = X.Column(i).ToArray() |> Array.map (fun(x) -> (byte)x)
+        let imageData = X.Column(i).ToArray() |> Array.map (fun(x) -> (byte)(x*255.0))
         OpenCVUtils.showImageUntilKeyEntered (imageData) ("Image : " + i.ToString()) 3
 
 let compareProviderPerformance = fun() ->
